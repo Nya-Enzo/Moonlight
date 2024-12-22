@@ -17,6 +17,7 @@ public class PlayerData {
     public float[] violationMap = new float[64]; // Violation map
     public FakePlayer fake; // The fake player entity used for some checks
     public float lastX, lastY, lastZ, lastPitch, lastYaw, predictedFallAmount, currentSpeed, lastSpeed, balance = 0; // Last player position info and other movement stuff
+    public float jumpMotion = 0.f;
     public int onGroundTicks, offGroundTicks, fallingTicks = 0; // Ticks
     public boolean onGround = true; // onGround stores if the player is near ground, onGroundAlternate stores if the player is directly on ground
     public Vector3 startFallPos, lastGroundPos = null; // Position of when the player started falling

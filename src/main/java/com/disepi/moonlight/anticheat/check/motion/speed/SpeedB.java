@@ -2,6 +2,7 @@ package com.disepi.moonlight.anticheat.check.motion.speed;
 
 import cn.nukkit.Player;
 import cn.nukkit.network.protocol.MovePlayerPacket;
+import cn.nukkit.network.protocol.PlayerAuthInputPacket;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;
 import com.disepi.moonlight.utils.MotionUtils;
@@ -17,14 +18,13 @@ public class SpeedB extends Check {
     // This doubles off as an ordinary speed check and a friction check.
 
     public void doFailCheck(PlayerData d, Player p, float value) {
-        lagback(p, d);
         violate(p, d, value, true); // Violate
     }
 
-    public void check(MovePlayerPacket e, PlayerData d, Player p) {
+    public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
         reward(d, 0.05f); // Violation reward
 
-        if (e.y < -100) return;
+        if (e.getPosition().y < -100) return;
 
         if (d.onGround && d.onGroundTicks > 10) // If we are on the ground and speed is too high
         {
@@ -39,14 +39,6 @@ public class SpeedB extends Check {
             {
                 fail(p, "expected=" + expected + ", received=" + d.currentSpeed + ", offGroundTicks=" + d.offGroundTicks + ", type=AIR, vl=" + (int) getViolationScale(d)); // Failed check
                 doFailCheck(d, p, 1.25f);
-            } else if (d.currentSpeed > minSpeed && d.lastSpeed > minSpeed) {
-                if (d.currentSpeed == d.lastSpeed) {
-                    fail(p, "received=" + d.currentSpeed + ", offGroundTicks=" + d.offGroundTicks + ", type=AIR_FRICTION_INVALID, vl=" + (int) getViolationScale(d)); // Failed check
-                    doFailCheck(d, p, 1.25f);
-                } else if (d.currentSpeed > d.lastSpeed && d.offGroundTicks != 0) {
-                    fail(p, "received=" + d.currentSpeed + ", last=" + d.lastSpeed + ", offGroundTicks=" + d.offGroundTicks + ", type=AIR_FRICTION_INVALID_TYPE2, vl=" + (int) getViolationScale(d)); // Failed check
-                    doFailCheck(d, p, 1.25f);
-                }
             }
         }
     }

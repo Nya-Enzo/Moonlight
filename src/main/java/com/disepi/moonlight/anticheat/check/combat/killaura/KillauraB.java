@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.MovePlayerPacket;
+import cn.nukkit.network.protocol.PlayerAuthInputPacket;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;
 import com.disepi.moonlight.utils.FakePlayer;
@@ -26,7 +27,8 @@ public class KillauraB extends Check {
         reward(d, 0.5f);
 
         // If the attacker hits a fake player, they fail the check
-        if (e.getEntity() instanceof FakePlayer) {
+        if (e.getEntity() instanceof FakePlayer && d.pingInTicks <= 3) {
+            //Above three ticks of delay, the player becomes unpredictable and could attack the entity accidentally.
             fail(p, "attacking an invalid entity"); // Check has been failed by the user
             violate(p, d, 1, true);
         } else // Instead, if we don't hit a fake player but a real player/mob/entity, do this instead:
@@ -41,7 +43,7 @@ public class KillauraB extends Check {
     }
 
     // Our move callback
-    public void check(MovePlayerPacket e, PlayerData d, Player p) {
+    public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
         if (d.fake == null)
             return; // If the fake player does not exist for the player, we don't need to adjust it, so return.
         d.fake.ticks++; // Increment the amount of ticks the fake player has existed for

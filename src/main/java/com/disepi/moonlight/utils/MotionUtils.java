@@ -7,8 +7,11 @@ public class MotionUtils {
     public static final double DEG = PI / 180.0;
     public static final double DEG_RAD = 180.0 / PI;
 
+    public static final float DRAG = 0.08f;
+    public static final float GRAVITY = 0.9800000190734863f;
+
     // The default downwards velocity
-    public static final double GRAVITY = 0.07840000093;
+    public static final double FALL_GRAVITY = -0.07840000093;
 
     // The maximum speed you can reach while on ground
     public static final double GROUND_SPEED_DEFAULT = 0.38573077;
