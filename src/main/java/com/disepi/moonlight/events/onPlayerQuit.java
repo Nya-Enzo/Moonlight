@@ -2,6 +2,7 @@ package com.disepi.moonlight.events;
 
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import com.disepi.moonlight.anticheat.Moonlight;
 import com.disepi.moonlight.anticheat.player.PlayerData;
@@ -15,5 +16,11 @@ public class onPlayerQuit implements Listener {
             data.destructFakePlayer();
         }
         Moonlight.removeData(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent event) {
+        if(event.getReasonEnum().equals(PlayerKickEvent.Reason.FLYING_DISABLED))
+            event.setCancelled(true); // Remove kicks for flying is not enabled, as this is supposed to be handled by the anticheat itself.
     }
 }

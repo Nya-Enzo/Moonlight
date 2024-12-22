@@ -12,9 +12,9 @@ public class onPlayerAttackEntity implements Listener {
     // Called upon an entity attacking another entity
     @EventHandler
     public void onPlayerAttackEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player))
+        if (!(event.getDamager() instanceof Player player))
             return; // If the attacker is not a player (for example Zombie hitting another Zombie), we skip the check
-        Player player = (Player) event.getDamager(); // Returns the player
+
         PlayerData data = Moonlight.getData(player); // Get the data
         if (data == null) return;
 

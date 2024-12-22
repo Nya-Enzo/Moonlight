@@ -10,5 +10,6 @@ public class onPlayerJoin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Moonlight.addData(event.getPlayer());
+        event.getPlayer().setCheckMovement(false);
     }
 }

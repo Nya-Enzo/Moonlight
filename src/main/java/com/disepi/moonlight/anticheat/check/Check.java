@@ -3,10 +3,7 @@ package com.disepi.moonlight.anticheat.check;
 import cn.nukkit.Player;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.InventoryTransactionPacket;
-import cn.nukkit.network.protocol.MobEquipmentPacket;
-import cn.nukkit.network.protocol.MovePlayerPacket;
-import cn.nukkit.network.protocol.PlayerActionPacket;
+import cn.nukkit.network.protocol.*;
 import cn.nukkit.utils.TextFormat;
 import com.disepi.moonlight.anticheat.Moonlight;
 import com.disepi.moonlight.anticheat.player.PlayerData;
@@ -35,7 +32,7 @@ public class Check {
         d.resetMove = true;
         d.teleportPos = pos;
         d.isTeleporting = true;
-        p.teleport(pos);
+        p.teleport(pos.add(0, 9.894371033e-6f, 0));
     }
 
     // Proxy function for above function
@@ -68,6 +65,9 @@ public class Check {
     // Below are override functions - they do nothing but they get overridden in standalone checks
 
     public void check(MovePlayerPacket e, PlayerData d, Player p) {
+    }
+
+    public void check(PlayerAuthInputPacket e, PlayerData d, Player p) {
     }
 
     public void check(EntityDamageByEntityEvent e, PlayerData d, Player p) {

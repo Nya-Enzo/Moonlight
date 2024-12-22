@@ -16,14 +16,13 @@ public class onPlayerSetMotion implements Listener {
 
     @EventHandler
     public void onPlayerSetMotion(DataPacketSendEvent event) {
-        if (!(event.getPacket() instanceof SetEntityMotionPacket)) // If the sent packet isn't SetEntityMotionPacket then we don't want it right now
+        if (!(event.getPacket() instanceof SetEntityMotionPacket packet)) // If the sent packet isn't SetEntityMotionPacket then we don't want it right now
             return;
-        if (!(event.getPlayer() instanceof Player)) return; // Target must be a player
-        SetEntityMotionPacket packet = (SetEntityMotionPacket) event.getPacket();
+        if (event.getPlayer() == null) return; // Target must be a player
+        if(packet.eid != event.getPlayer().getId()) return; //We don't wanna give everyone an exemption if they're not the ones getting kbed
         PlayerData data = Moonlight.getData(event.getPlayer());
         if (data == null) return;
-        float motionPower = Math.abs(packet.motionX) + Math.abs(packet.motionY) + Math.abs(packet.motionZ);
-        data.lastLerpStrength = motionPower;
+        data.lastLerpStrength = Math.abs(packet.motionX) + Math.abs(packet.motionY) + Math.abs(packet.motionZ);
         data.lerpTicks = 30; // Set lerp ticks
     }
 }

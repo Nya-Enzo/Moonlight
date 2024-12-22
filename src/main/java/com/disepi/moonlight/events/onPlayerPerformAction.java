@@ -5,30 +5,53 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.server.DataPacketReceiveEvent;
 import cn.nukkit.network.protocol.PlayerActionPacket;
+import cn.nukkit.network.protocol.PlayerAuthInputPacket;
+import cn.nukkit.network.protocol.types.AuthInputAction;
+import cn.nukkit.network.protocol.types.PlayerActionType;
 import com.disepi.moonlight.anticheat.Moonlight;
 import com.disepi.moonlight.anticheat.check.Check;
 import com.disepi.moonlight.anticheat.player.PlayerData;
+import com.disepi.moonlight.utils.PacketUtils;
+
+import java.util.List;
 
 public class onPlayerPerformAction implements Listener {
 
     // Listens for PlayerActionPackets. These are packets that get sent when you start sprinting, sneaking, etc.
 
+    public void handleActions(Player player, List<PlayerActionPacket> packets) {
+        PlayerData data = Moonlight.getData(player);
+        for(var packet : packets) {
+            if(packet.action == PlayerActionType.START_JUMP.ordinal()) {
+                data.jumpTicks = 20;
+            }
+
+            Moonlight.checks.forEach(check -> check.check(packet, data, player));
+        }
+    }
+
     @EventHandler
     public void onPlayerPerformAction(DataPacketReceiveEvent event) {
-        if (!(event.getPacket() instanceof PlayerActionPacket)) // If the received packet isn't PlayerActionPacket then we don't want it right now
-            return;
-
-        PlayerActionPacket packet = (PlayerActionPacket) event.getPacket();
         PlayerData data = Moonlight.getData(event.getPlayer());
         if (data == null) return;
 
-        if (packet.action == PlayerActionPacket.ACTION_JUMP)
-            data.jumpTicks = 20; // Set jump ticks
-        else if (packet.action == PlayerActionPacket.ACTION_START_BREAK) {
-            Player player = event.getPlayer();
-            for (Check check : Moonlight.checks) { // Loop through all checks in Moonlight's list
-                check.check(packet, data, player); // Call the check function that wants a PlayerActionPacket
+        if(event.getPacket() instanceof PlayerAuthInputPacket packet) {
+            var actions = PacketUtils.getPlayerActions(event.getPlayer(), packet);
+            for(var action : actions) {
+                if(!PacketUtils.VALID_BLOCK_ACTIONS.contains(PlayerActionType.fromOrNull(action.action))) {
+                    event.setCancelled(true); //drop packet if it appears to be invalid
+                    return;
+                }
             }
+            handleActions(event.getPlayer(), actions);
+        }
+        else if(event.getPacket() instanceof PlayerActionPacket packet) {
+            if(PlayerActionType.fromOrNull(packet.action) == null || packet.entityId != event.getPlayer().getId()) {
+                event.setCancelled(true);
+                event.getPlayer().kick("Invalid Packet.", false);
+                return;
+            }
+            handleActions(event.getPlayer(), List.of(packet));
         }
     }
 }

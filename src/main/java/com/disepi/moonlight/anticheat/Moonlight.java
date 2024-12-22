@@ -25,7 +25,7 @@ public class Moonlight {
     public static CopyOnWriteArrayList<FakePlayer> fakePlayers = new CopyOnWriteArrayList<FakePlayer>(); // Stores all of the instances of fake players
     public static int checkAmount = 0; // Check amount
     public static String stylizedChatString = TextFormat.DARK_GRAY + "[" + TextFormat.DARK_AQUA + "moonlight" + TextFormat.DARK_GRAY + "] " + TextFormat.WHITE;
-    public static String kickString = "Invalid byte buffer received from client";
+    public static String kickString = "Unfair Advantage";
 
     // Configuration values
     public static boolean cancelNukkitInvalidMove = true;
