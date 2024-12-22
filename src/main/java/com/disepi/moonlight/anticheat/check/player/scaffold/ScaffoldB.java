@@ -70,6 +70,14 @@ public class ScaffoldB extends Check {
                         if (!Util.isRoughlyEqual(x, 0, leniency))
                             doFailCheck(p, d, "PLACE_ANGLE_WEST", x, y, z, placeDistance, useItemData.face);
                         break;
+                    case UP:
+                        if (!Util.isRoughlyEqual(y, 1, leniency))
+                            doFailCheck(p, d, "PLACE_ANGLE_UP", x, y, z, placeDistance, useItemData.face);
+                        break;
+                    case DOWN:
+                        if (!Util.isRoughlyEqual(y, 0, leniency))
+                            doFailCheck(p, d, "PLACE_ANGLE_DOWN", x, y, z, placeDistance, useItemData.face);
+                        break;
                 }
             }
         }
