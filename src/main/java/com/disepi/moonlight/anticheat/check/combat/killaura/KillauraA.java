@@ -23,5 +23,4 @@ public class KillauraA extends Check {
             violate(p, d, 1, true);
         }
     }
-
 }

@@ -198,6 +198,8 @@ public class onPlayerSendPacket implements Listener {
             if (isWearingElytra) data.currentSpeed /= 4.0;
 
             data.resetMove = false;
+            data.ping = player.getPing();
+            data.pingInTicks = (int) ((double) (data.ping / 50));
 
             // Cycles through and runs Moonlight's checks.
             if (player.gamemode != 1 && player.isAlive()) { // TODO: Implement this better and create creative mode specific checks or adjust checks to fit creative mode's movements. Creative mode has movement mechanics such as flying which can false flag a lot of checks.
