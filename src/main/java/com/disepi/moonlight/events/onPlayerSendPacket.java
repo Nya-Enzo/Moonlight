@@ -9,6 +9,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemElytra;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.*;
+import cn.nukkit.network.protocol.types.InputMode;
 import cn.nukkit.potion.Effect;
 import com.disepi.moonlight.anticheat.Moonlight;
 import com.disepi.moonlight.anticheat.check.Check;
@@ -200,6 +201,7 @@ public class onPlayerSendPacket implements Listener {
             data.resetMove = false;
             data.ping = player.getPing();
             data.pingInTicks = (int) ((double) (data.ping / 50));
+            data.isTouchscreen = packet.getInputMode() == InputMode.TOUCH;
 
             // Cycles through and runs Moonlight's checks.
             if (player.gamemode != 1 && player.isAlive()) { // TODO: Implement this better and create creative mode specific checks or adjust checks to fit creative mode's movements. Creative mode has movement mechanics such as flying which can false flag a lot of checks.
